@@ -13,8 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # 创建临时目录
-RUN mkdir -p /tmp/video_frames /tmp/ecommerce_catalog
+RUN mkdir -p /tmp/video_frames /tmp/ecommerce_catalog /tmp/video_api_results
 
-EXPOSE 8000
+# Render uses PORT env var, default 10000
+ENV PORT=10000
+EXPOSE $PORT
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+# Use shell form so $PORT is expanded at runtime
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT --workers 2
