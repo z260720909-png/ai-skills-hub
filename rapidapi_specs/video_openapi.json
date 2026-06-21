@@ -1,0 +1,188 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Video Storyboard API",
+    "description": "Extract scenes, key frames, and transcribe audio from videos. Supports YouTube, Bilibili, TikTok, and local files. Export to FCPXML for Final Cut Pro.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "AI Skills Hub Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ai-skills-hub.onrender.com"
+    }
+  ],
+  "paths": {
+    "/video/analyze": {
+      "post": {
+        "summary": "Analyze Video",
+        "description": "Full video analysis: scene detection, key frame extraction, and optional speech-to-text. Supports local files and online URLs (YouTube, Bilibili, TikTok, etc.).",
+        "operationId": "analyzeVideo",
+        "tags": [
+          "Analysis"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "video_url": {
+                    "type": "string",
+                    "description": "Video URL (YouTube/Bilibili/TikTok/etc.)"
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "scene",
+                      "uniform",
+                      "smart"
+                    ],
+                    "default": "scene",
+                    "description": "Extraction mode"
+                  },
+                  "max_scenes": {
+                    "type": "integer",
+                    "default": 20,
+                    "description": "Max scenes for smart mode"
+                  },
+                  "threshold": {
+                    "type": "number",
+                    "default": 0.3,
+                    "description": "Scene detection threshold (0-1)"
+                  },
+                  "asr": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable speech recognition"
+                  },
+                  "whisper_model": {
+                    "type": "string",
+                    "enum": [
+                      "tiny",
+                      "base",
+                      "small",
+                      "medium",
+                      "large"
+                    ],
+                    "default": "base"
+                  },
+                  "whisper_lang": {
+                    "type": "string",
+                    "description": "Language code (zh/en, auto-detect if empty)"
+                  },
+                  "export": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "fcpxml"
+                      ]
+                    },
+                    "description": "Extra export formats"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Analysis results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid video URL or file"
+          }
+        }
+      }
+    },
+    "/video/info": {
+      "get": {
+        "summary": "Get Video Info",
+        "description": "Get video metadata (duration, resolution, frame rate, orientation) without full processing.",
+        "operationId": "getVideoInfo",
+        "tags": [
+          "Info"
+        ],
+        "parameters": [
+          {
+            "name": "video_url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Video URL"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/video/supported-domains": {
+      "get": {
+        "summary": "List Supported Video Domains",
+        "description": "Get the list of all supported online video platform domains.",
+        "operationId": "listDomains",
+        "tags": [
+          "Info"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Domain list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/video/health": {
+      "get": {
+        "summary": "Check Service Health",
+        "description": "Check if ffmpeg and Whisper are available on the server.",
+        "operationId": "videoHealth",
+        "tags": [
+          "Info"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Multi-Platform E-Commerce API",
+    "description": "Unified API for 13 e-commerce platforms. Product management, orders, SEO, content generation across Gumroad, Shopify, Etsy, Amazon, Lazada, Temu, AliExpress and Chinese platforms.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "AI Skills Hub Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ai-skills-hub.onrender.com"
+    }
+  ],
+  "paths": {
+    "/ecommerce/platforms": {
+      "get": {
+        "summary": "List Supported Platforms",
+        "description": "Get all 13 supported e-commerce platforms with their configuration status.",
+        "operationId": "listPlatforms",
+        "tags": [
+          "Platform Info"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Platform list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/catalog": {
+      "post": {
+        "summary": "Add Product to Catalog",
+        "description": "Add a new product to your centralized product catalog.",
+        "operationId": "addCatalogProduct",
+        "tags": [
+          "Product Catalog"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/products": {
+      "post": {
+        "summary": "Create Product on Platform",
+        "description": "Create a new product on a specific platform. Requires platform API credentials.",
+        "operationId": "createProduct",
+        "tags": [
+          "Products"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "platform",
+                  "product_data"
+                ],
+                "properties": {
+                  "platform": {
+                    "type": "string"
+                  },
+                  "product_data": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/orders": {
+      "get": {
+        "summary": "Unified Order View",
+        "description": "View orders across all connected platforms in a unified format.",
+        "operationId": "listOrders",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by platform"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "Number of orders"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/sales": {
+      "get": {
+        "summary": "Sales Report (Gumroad)",
+        "description": "Get Gumroad sales data for a specified period.",
+        "operationId": "getSales",
+        "tags": [
+          "Sales"
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            },
+            "description": "Number of days to report"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sales data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/multi-content": {
+      "post": {
+        "summary": "Multi-Platform Content Generation",
+        "description": "Generate platform-specific product listing content for multiple platforms at once.",
+        "operationId": "multiContent",
+        "tags": [
+          "Cross-Platform"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "product_info",
+                  "platforms"
+                ],
+                "properties": {
+                  "product_info": {
+                    "type": "object"
+                  },
+                  "platforms": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Generated content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/sync": {
+      "post": {
+        "summary": "Cross-Platform Sync",
+        "description": "Sync a product to multiple platforms simultaneously with platform-specific adaptations.",
+        "operationId": "syncProduct",
+        "tags": [
+          "Cross-Platform"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "product_info",
+                  "target_platforms"
+                ],
+                "properties": {
+                  "product_info": {
+                    "type": "object"
+                  },
+                  "target_platforms": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sync results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/analyze": {
+      "get": {
+        "summary": "Cross-Platform Analytics",
+        "description": "Analyze performance across all connected platforms.",
+        "operationId": "analyzePlatforms",
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Analytics data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ecommerce/keywords": {
+      "get": {
+        "summary": "Keyword Trend Analysis",
+        "description": "Analyze keyword trends and popularity for product SEO optimization.",
+        "operationId": "keywordAnalysis",
+        "tags": [
+          "SEO"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "trending"
+            },
+            "description": "Analysis type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Keyword data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

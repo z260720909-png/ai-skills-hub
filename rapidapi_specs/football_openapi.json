@@ -1,0 +1,408 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Football Match Analyzer API",
+    "description": "AI-powered football match analysis API. Fixtures, standings, H2H, score predictions, odds, statistics for 20+ leagues worldwide including Premier League, La Liga, Serie A, Bundesliga, and Champions League.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "AI Skills Hub Support",
+      "email": "support@aiskillshub.dev"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ai-skills-hub.onrender.com"
+    }
+  ],
+  "paths": {
+    "/football/fixtures": {
+      "get": {
+        "summary": "Query Football Fixtures",
+        "description": "Search for upcoming and past football matches by league, date, team, or season. Supports live match queries.",
+        "operationId": "getFixtures",
+        "tags": [
+          "Fixtures"
+        ],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "League name (e.g. '英超', 'Premier League') or ID"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Match date (YYYY-MM-DD)"
+          },
+          {
+            "name": "team",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Team name or ID"
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Season year (e.g. 2024)"
+          },
+          {
+            "name": "live",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no"
+              ],
+              "default": "no"
+            },
+            "description": "Show live matches only"
+          },
+          {
+            "name": "next",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "Number of upcoming matches to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fixture list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/standings": {
+      "get": {
+        "summary": "League Standings",
+        "description": "Get full league table with points, wins, draws, losses, goals for/against, and recent form.",
+        "operationId": "getStandings",
+        "tags": [
+          "Standings"
+        ],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "League name or ID (required)"
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Season year"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "League standings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/teams": {
+      "get": {
+        "summary": "Search Teams",
+        "description": "Search for football teams by name or filter by league.",
+        "operationId": "searchTeams",
+        "tags": [
+          "Teams"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Team name to search"
+          },
+          {
+            "name": "league",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by league"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/h2h": {
+      "get": {
+        "summary": "Head-to-Head Comparison",
+        "description": "Compare two teams' historical head-to-head record including wins, draws, losses, and goals.",
+        "operationId": "getH2H",
+        "tags": [
+          "H2H"
+        ],
+        "parameters": [
+          {
+            "name": "team1",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Team 1 ID"
+          },
+          {
+            "name": "team2",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Team 2 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "H2H comparison",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/prediction": {
+      "get": {
+        "summary": "Match Score Prediction",
+        "description": "AI-powered match outcome prediction based on team form, H2H record, and statistical models.",
+        "operationId": "getPrediction",
+        "tags": [
+          "Prediction"
+        ],
+        "parameters": [
+          {
+            "name": "fixture_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Fixture ID (required)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Match prediction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/analysis": {
+      "get": {
+        "summary": "Full Match Analysis",
+        "description": "Comprehensive match analysis combining predictions, H2H, team form, and statistics into a unified report.",
+        "operationId": "getAnalysis",
+        "tags": [
+          "Analysis"
+        ],
+        "parameters": [
+          {
+            "name": "fixture_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Fixture ID (required)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full analysis report",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/odds": {
+      "get": {
+        "summary": "Betting Odds",
+        "description": "Real-time betting odds for matches. Supports 1X2, Over/Under, and Asian Handicap markets.",
+        "operationId": "getOdds",
+        "tags": [
+          "Odds"
+        ],
+        "parameters": [
+          {
+            "name": "fixture_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Fixture ID"
+          },
+          {
+            "name": "league",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "League name or ID"
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Season year"
+          },
+          {
+            "name": "bet_type",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                3,
+                5
+              ],
+              "default": 1
+            },
+            "description": "1=1X2, 3=Asian Handicap, 5=Over/Under"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Odds data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/statistics": {
+      "get": {
+        "summary": "Match Statistics",
+        "description": "Detailed match statistics including possession, shots, corners, fouls, and more.",
+        "operationId": "getStatistics",
+        "tags": [
+          "Statistics"
+        ],
+        "parameters": [
+          {
+            "name": "fixture_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Fixture ID (required)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Match statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/football/today": {
+      "get": {
+        "summary": "Today's Matches Summary",
+        "description": "Quick overview of all today's football matches across major leagues.",
+        "operationId": "getTodaySummary",
+        "tags": [
+          "Today"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Today's match summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

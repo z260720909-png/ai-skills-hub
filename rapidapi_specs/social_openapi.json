@@ -1,0 +1,481 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Social Media Content AI API",
+    "description": "AI-powered social media content toolkit for 8 platforms. Anti-AI rewriting, platform formatting, competitor analysis, banned words checker, content calendar, and more.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "AI Skills Hub Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ai-skills-hub.onrender.com"
+    }
+  ],
+  "paths": {
+    "/social/anti-ai": {
+      "post": {
+        "summary": "Anti-AI Content Rewriting",
+        "description": "Transform AI-generated text into natural, human-sounding content. 3 intensity levels (light/medium/heavy). Preserves technical terms like DN20, 1.6MPa, ISO certifications.",
+        "operationId": "antiAiRewrite",
+        "tags": [
+          "Content Creation"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "text"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "Text to rewrite"
+                  },
+                  "level": {
+                    "type": "string",
+                    "enum": [
+                      "light",
+                      "medium",
+                      "heavy"
+                    ],
+                    "default": "medium"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "default": "general"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rewritten content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/format": {
+      "post": {
+        "summary": "Platform Format Adaptation",
+        "description": "Auto-adapt content to specific platform requirements: character limits, hashtag style, emoji density, paragraph style, and tone.",
+        "operationId": "platformFormat",
+        "tags": [
+          "Content Creation"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "content",
+                  "title",
+                  "platform"
+                ],
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "enum": [
+                      "xiaohongshu",
+                      "douyin",
+                      "wechat",
+                      "weibo",
+                      "bilibili",
+                      "toutiao",
+                      "zhihu",
+                      "kuaishou"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Formatted content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/image-prompt": {
+      "post": {
+        "summary": "Image Prompt Generation",
+        "description": "Generate platform-specific image description prompts for AI image generators, considering aspect ratio, style, and platform norms.",
+        "operationId": "imagePrompt",
+        "tags": [
+          "Content Creation"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "topic"
+                ],
+                "properties": {
+                  "topic": {
+                    "type": "string"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "default": "general"
+                  },
+                  "style": {
+                    "type": "string",
+                    "default": "modern"
+                  },
+                  "count": {
+                    "type": "integer",
+                    "default": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image prompts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/reply": {
+      "post": {
+        "summary": "Comment/DM Reply Generator",
+        "description": "Auto-generate engaging, platform-appropriate replies to comments and direct messages.",
+        "operationId": "generateReply",
+        "tags": [
+          "Engagement"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "comment"
+                ],
+                "properties": {
+                  "comment": {
+                    "type": "string"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "default": "general"
+                  },
+                  "tone": {
+                    "type": "string",
+                    "default": "auto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Generated reply",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/score": {
+      "post": {
+        "summary": "Content Quality Scoring",
+        "description": "Rate your content against platform best practices. Scores title, body, hashtags, emoji usage, and overall engagement potential.",
+        "operationId": "contentScore",
+        "tags": [
+          "Analytics"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "text"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "default": "general"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Content score",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/calendar": {
+      "get": {
+        "summary": "Content Calendar Generator",
+        "description": "Generate a multi-day posting schedule optimized for platform peak engagement times.",
+        "operationId": "contentCalendar",
+        "tags": [
+          "Planning"
+        ],
+        "parameters": [
+          {
+            "name": "niche",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "综合"
+            },
+            "description": "Content niche/industry"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 7
+            },
+            "description": "Number of days (1-30)"
+          },
+          {
+            "name": "platforms",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "xiaohongshu,douyin,wechat"
+            },
+            "description": "Comma-separated platform list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content calendar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/competitor": {
+      "get": {
+        "summary": "Competitor Analysis Framework",
+        "description": "Generate a structured competitor analysis framework for a specific niche and platform, including data fields to fill.",
+        "operationId": "competitorAnalysis",
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "niche",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Niche/industry to analyze"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "general"
+            },
+            "description": "Platform context"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Competitor analysis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/banned-words": {
+      "get": {
+        "summary": "Industry Banned Words Checker",
+        "description": "Check prohibited advertising terms for 6 industries (Beauty, Home & Building, Food & Health, Medical, Finance, Education) across platforms.",
+        "operationId": "bannedWords",
+        "tags": [
+          "Compliance"
+        ],
+        "parameters": [
+          {
+            "name": "industry",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "beauty",
+                "home",
+                "food",
+                "medical",
+                "finance",
+                "education"
+              ]
+            },
+            "description": "Industry category"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "all"
+            },
+            "description": "Platform filter (xiaohongshu/douyin/all)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Banned words list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/trending": {
+      "get": {
+        "summary": "Trending Topics Search",
+        "description": "Find trending topics and hashtags for content creation.",
+        "operationId": "trendingSearch",
+        "tags": [
+          "Discovery"
+        ],
+        "parameters": [
+          {
+            "name": "topic",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Topic keyword"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "general"
+            },
+            "description": "Platform context"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trending topics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/social/platforms": {
+      "get": {
+        "summary": "List Supported Platforms",
+        "description": "Get the list of all 8 supported social media platforms with their specs.",
+        "operationId": "listPlatforms",
+        "tags": [
+          "Info"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Platform list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
